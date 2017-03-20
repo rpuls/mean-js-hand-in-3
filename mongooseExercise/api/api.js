@@ -1,5 +1,5 @@
 let router = require("express").Router();
-var Joke = require('../models/JokeEntity');
+var Joke = require('../models/Jokes');
 
 router.get("/", (req, res) => {
   res.json({ msg: "Hello World" });
@@ -27,9 +27,7 @@ router.get('/jokes/:id', function (req, res, next) {
 
 //add joke 
 router.post("/jokes", function (req, res, next) {
-  var requestO = req;
   var joke = req.body;
-  console.log("dgdfg" + JSON.stringify(joke));
   Joke.create(joke, function (err, joke) {
     if (err) throw err;
     console.log();
@@ -53,6 +51,7 @@ router.delete('/jokes/:id', function (req, res, next) {
   Joke.findByIdAndRemove(req.params.id, function (err) {
     if (err) throw err;
     console.log('joke successfully removed!');
+    res.status(204).send();
   });
 });
 

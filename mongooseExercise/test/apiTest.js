@@ -5,7 +5,7 @@ let fetch = require("node-fetch");
 const TEST_PORT = 9999;
 const SERVER_URL = `http://localhost:${TEST_PORT}`;
 const URL = SERVER_URL + "/api/jokes";
-const TEST_DB_CONNECTION = "mongodb://localhost/testJokeDB";
+const TEST_DB_CONNECTION = "mongodb://localhost/testJokeDB"; //"mongodb://puls:test123@ds137090.mlab.com:37090/jokedb"
 
 let app = require("./../app");
 
@@ -13,7 +13,7 @@ var joke1 = {
   "_id": ObjectID("5063114bd386d8fadbd6b004"),
   "joke": "Joke-1",
   "category": ["short", "alcohol", "quote"],
-  "reference": {"author": "Someone", "link": "qqq"},
+  "reference": { "author": "Someone", "link": "qqq" },
   "lastEdited": new Date()
 };
 
@@ -53,7 +53,7 @@ describe("Jokes API", function () {
           if (err) {
             throw new Error(err.Message);
           }
-          connect.close(()=> done());
+          connect.close(() => done());
         });
       })
     });
@@ -61,14 +61,14 @@ describe("Jokes API", function () {
 
   describe("GET:  /api/jokes", function () {
     it("should find two jokes", function (done) {
-      fetch(URL, {method: 'get'}).then(function (response) {
+      fetch(URL, { method: 'get' }).then(function (response) {
         return response.json();
       }).then(res => {
         expect(res.length).to.be.equal(2);
         expect(res[0]._id).to.be.equal("5063114bd386d8fadbd6b004");
         expect(res[1]._id).to.be.equal("5063114bd386d8fadbd6b005");
         done();
-      }).catch((err)=> {
+      }).catch((err) => {
         done(err);
       });
     })
@@ -76,12 +76,12 @@ describe("Jokes API", function () {
 
   describe("GET:  /api/jokes/:id", function () {
     it("should find joke-1", function (done) {
-      fetch(URL + "/5063114bd386d8fadbd6b004", {method: 'get'}).then(function (response) {
+      fetch(URL + "/5063114bd386d8fadbd6b004", { method: 'get' }).then(function (response) {
         return response.json();
       }).then(res => {
         expect(res._id).to.be.equal("5063114bd386d8fadbd6b004");
         done();
-      }).catch((err)=> {
+      }).catch((err) => {
         done(err);
       });
     })
@@ -91,17 +91,17 @@ describe("Jokes API", function () {
     let newJoke = {
       joke: "abcde",
       category: ["general"],
-      reference: {"author": "Someone", "link": "NADA"},
+      reference: { "author": "Someone", "link": "NADA" },
     }
     it("should Add a new joke", function (done) {
       fetch(URL, {
-          method: 'post',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(newJoke)
-        }
+        method: 'post',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newJoke)
+      }
       ).then(function (response) {
         expect(response.status).to.be.equal(200);
         return response.json();
@@ -109,15 +109,15 @@ describe("Jokes API", function () {
         expect(res).to.have.property("_id").and.not.equal(null);
         expect(res.joke).to.be.equal("abcde");
         done();
-      }).catch((err)=> {
+      }).catch((err) => {
         done(err);
       });
     });
   });
 
   describe("PUT:  /api/jokes/", function () {
-    let {joke, category, reference} = joke1;
-    let jokeToEdit = {joke, category, reference};
+    let { joke, category, reference } = joke1;
+    let jokeToEdit = { joke, category, reference };
     it("should Edit Joke-1", function (done) {
       fetch(URL + "/5063114bd386d8fadbd6b004", {
         method: 'put',
@@ -139,23 +139,26 @@ describe("Jokes API", function () {
 
   describe("DELETE:  /api/jokes/", function () {
     it("should Delete Joke-1", function (done) {
-      fetch(URL + "/5063114bd386d8fadbd6b004", {method: 'delete'}).then(function (response) {
-        //Server should remove joke, and return 204
-        expect(response.status).to.be.equal(204);
-        //Verify that it was actually removed
-        fetch(URL, {method: 'get'}).then(function (response) {
-          return response.json();
-        }).then(res => {
-          expect(res.status).to.be.equal(200);//.length).to.be.equal(1);
-          done();
+      fetch(URL + "/5063114bd386d8fadbd6b004", { method: 'delete' }).then(
+        function (response) {
+          //Server should remove joke, and return 204
+          expect(response.status).to.be.equal(204);
+          //Verify that it was actually removed
+          fetch(URL, { method: 'get' }).then(
+            function (response) {
+              return response.json();
+            }).then(
+            res => {
+              expect(res.length).to.be.equal(1);
+              done();
+            });
         });
-      });
     });
   });
 
   describe("GET:  /nonExistingRoute", function () {
     it("should get 404, Non Existing", function (done) {
-      fetch(SERVER_URL + "/nonExistingRoute", {method: 'get'}).then(function (response) {
+      fetch(SERVER_URL + "/nonExistingRoute", { method: 'get' }).then(function (response) {
         //console.log(response)
         expect(response.status).to.be.equal(404);
         done();
