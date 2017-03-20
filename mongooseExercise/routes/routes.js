@@ -24,6 +24,7 @@ router.get('/addJoke', function (req, res, next) {
 
 router.post("/addJoke", function (req, res, next) {
   var joke = req.body.joke;
+  //delete and recreate with angual !
   fetch(URL, {
     method: 'post',
     headers: {

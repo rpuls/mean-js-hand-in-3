@@ -1,5 +1,16 @@
-<ul>
-    {{#each jokes}}
-    <li>{{this}}</li>
-    {{/each}}
-    </ul>
+<div ng-controller="JokeController">
+<h2>All jokes.... have a laugh!</h2>
+<input type="search" class="form-control" ng-model="jokeFilter" placeholder="Search joke">
+    <table class="table">
+        <tr>
+            <th>Author</th>
+            <th>Joke</th>
+            <th>Category</th>
+        </tr>
+        <tr ng-repeat="joke in jokes| filter: jokeFilter">
+            <td>{[{joke.reference.author}]}</td>
+            <td>{[{joke.joke}]}</td>
+            <td>{[{joke.joke}]}</td>
+        </tr>
+    </table>
+</div>

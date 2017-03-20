@@ -7,7 +7,7 @@ var JokeSchema = new Schema({
   joke: {type:String, required: true, min:5},
   category: Array,
   reference: {
-    aauthor: String,
+    author: String,
     link: String
   },
   lastEdited: Date
